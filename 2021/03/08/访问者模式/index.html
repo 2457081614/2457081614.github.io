@@ -1,0 +1,373 @@
+<!DOCTYPE html><html lang="zh-Hans" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>访问者模式 | 向往的博客</title><meta name="keywords" content="设计模式"><meta name="author" content="向往"><meta name="copyright" content="向往"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="访问者模式 定义：对于一组对象，在不改变数据结构的前提下，增加作用于这些结构元素新的功能。 基本思路： 软件系统中由许多对象构成的、比较稳定的对象结构，这些对象都有一个方法用于接受访问者对象的访问。访问者是一个接口，它有一个访问的方法，可以对访问的对象结构中不同类型的元素做出不同的处理。我们以一个简单的项目来说明访问者模式的用处。 雇员管理系统的设计   为了突出问题，我们对项目进行了简化，如下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="访问者模式">
+<meta property="og:url" content="http://example.com/2021/03/08/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="向往的博客">
+<meta property="og:description" content="访问者模式 定义：对于一组对象，在不改变数据结构的前提下，增加作用于这些结构元素新的功能。 基本思路： 软件系统中由许多对象构成的、比较稳定的对象结构，这些对象都有一个方法用于接受访问者对象的访问。访问者是一个接口，它有一个访问的方法，可以对访问的对象结构中不同类型的元素做出不同的处理。我们以一个简单的项目来说明访问者模式的用处。 雇员管理系统的设计   为了突出问题，我们对项目进行了简化，如下">
+<meta property="og:locale">
+<meta property="og:image" content="https://api.lyiqk.cn/scenery">
+<meta property="article:published_time" content="2021-03-08T12:46:25.000Z">
+<meta property="article:modified_time" content="2021-04-12T02:36:58.000Z">
+<meta property="article:author" content="向往">
+<meta property="article:tag" content="设计模式">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://api.lyiqk.cn/scenery"><link rel="shortcut icon" href="/img/icon.jpg"><link rel="canonical" href="http://example.com/2021/03/08/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-04-12 10:36:58'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="向往的博客" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/touxiang.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">61</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">21</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">15</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://api.lyiqk.cn/scenery')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">向往的博客</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首頁</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">访问者模式</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2021-03-08T12:46:25.000Z" title="Created 2021-03-08 20:46:25">2021-03-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2021-04-12T02:36:58.000Z" title="Updated 2021-04-12 10:36:58">2021-04-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="访问者模式"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><hr>
+<p>访问者模式</p>
+<p>定义：对于一组对象，在不改变数据结构的前提下，增加作用于这些结构元素新的功能。</p>
+<p>基本思路： 软件系统中由许多对象构成的、比较稳定的对象结构，这些对象都有一个方法用于接受访问者对象的访问。访问者是一个接口，它有一个访问的方法，可以对访问的对象结构中不同类型的元素做出不同的处理。我们以一个简单的项目来说明访问者模式的用处。</p>
+<p>雇员管理系统的设计</p>
+<p>  为了突出问题，我们对项目进行了简化，如下是雇员的一些属性，Name(姓名)、Income(收入)、</p>
+<p>VacationDays(年假天数)、Degree(等级)。以往公司职员年假天数未用完就直接作废，今年公司设置的人性化一点，如果没有用完，按照等级进行一定的补偿，并且随着不同的政策有不同的变化，要如何设计？</p>
+<span id="more"></span>
+
+
+
+<p>​     </p>
+<p>传统设计：</p>
+<p>传统的设计我们可以通过继承去实现。</p>
+<p>实体类：</p>
+<pre><code>public class Employee &#123;
+
+    private String name;
+    private float income;
+    private int vacationDays;
+    private int degree;
+
+    public Employee(String name, float income, int vacationDays, int degree) &#123;
+        this.name = name;
+        this.income = income;
+        this.vacationDays = vacationDays;
+        this.degree = degree;
+    &#125;
+
+    public void setName(String name) &#123;
+        this.name = name;
+    &#125;
+
+    public String getName() &#123;
+        return name;
+    &#125;
+
+    public void setIncome(float income) &#123;
+        this.income = income;
+    &#125;
+
+    public float getIncome() &#123;
+        return income;
+    &#125;
+
+    public void setVacationDays(int vacationDays) &#123;
+        this.vacationDays = vacationDays;
+    &#125;
+
+    public int getVacationDays() &#123;
+        return vacationDays;
+    &#125;
+
+    public void setDegree(int degree) &#123;
+        this.degree = degree;
+    &#125;
+
+    public int getDegree() &#123;
+        return degree;
+    &#125;
+
+&#125;
+
+
+
+public class Employees &#123;
+    private HashMap&lt;String, Employee&gt; employees;
+
+    public Employees() &#123;
+        employees = new HashMap&lt;String, Employee&gt;();
+    &#125;
+
+    public void Attach(Employee employee) &#123;
+        employees.put(employee.getName(), employee);
+    &#125;
+
+    public void Detach(Employee employee) &#123;
+        employees.remove(employee);
+    &#125;
+
+    public Employee getEmployee(String name) &#123;
+        return employees.get(name);
+    &#125;
+
+    public void getCompensation() &#123;
+        for (Employee employee : employees.values()) &#123;
+
+            System.out
+                    .println(employee.getName()
+                            + &quot;&#39;s Compensation is &quot;
+                            + (employee.getDegree()
+                                    * employee.getVacationDays() * 100));
+
+        &#125;
+
+    &#125;
+&#125;
+</code></pre>
+<p>测试类：</p>
+<pre><code>public class MainTest &#123;
+    public static void main(String[] args) &#123;
+        Employees mEmployees = new Employees();
+
+        mEmployees.Attach(new Employee(&quot;Tom&quot;, 4500, 8, 1));
+        mEmployees.Attach(new Employee(&quot;Jerry&quot;, 6500, 10, 2));
+        mEmployees.Attach(new Employee(&quot;Jack&quot;, 9600, 12, 3));
+        mEmployees.getCompensation();
+    &#125;
+
+&#125;
+</code></pre>
+<p>在这个简单的项目中，不变的是雇员的属性，变化的是计算方式及操作，每次增加新的操作都要增加新的方法在雇员类中或者使用继承去实现，这种设计会导致更新和维护比较困难，并且上面的设计违背了设计原则中的开闭原则：对功能的扩展要保持开放，对功能的修改要保持关闭。</p>
+<p>访问者模式：</p>
+<p>（1）Visitor：接口或者抽象类，它定义了对每一个元素（Element）访问的行为，它的参数就是可以访问的元素，它的方法数理论上来讲与元素个数是一样的，因此，访问者模式要求元素的类族要稳定，如果经常添加、移除元素类，必然会导致频繁地修改Visitor接口，如果这样则不适合使用访问者模式。</p>
+<p>（2）ConcreteVisitor1、ConcreteVisitor2：具体的访问类，它需要给出对每一个元素类访问时所产生的具体行为。</p>
+<p>（3）Element：元素接口或者抽象类，它定义了一个接受访问者的方法（Accept），其意义是指每一个元素都要可以被访问者访问。</p>
+<p>（4）ConcreteElementA、ConcreteElementB：具体的元素类，它提供接受访问方法的具体实现，而这个具体的实现，通常情况下是使用访问者提供的访问该元素类的方法。</p>
+<p>（5）ObjectStructure：定义当中所说的对象结构，对象结构是一个抽象表述，它内部管理了元素集合，并且可以迭代这些元素供访问者访问。 </p>
+<p>代码实现：</p>
+<p>首先我们实现一个Element基类。</p>
+<pre><code>public abstract class Element &#123;
+    abstract public void Accept(Visitor visitor);
+&#125;
+</code></pre>
+<p>我们的雇员实体类都继承Element,</p>
+<pre><code>public class Employee extends Element &#123;
+
+    private String name;
+    private float income;
+    private int vacationDays;
+    private int degree;
+
+    public Employee(String name, float income, int vacationDays, int degree) &#123;
+        this.name = name;
+        this.income = income;
+        this.vacationDays = vacationDays;
+        this.degree = degree;
+    &#125;
+
+    public void setName(String name) &#123;
+        this.name = name;
+    &#125;
+
+    public String getName() &#123;
+        return name;
+    &#125;
+
+    public void setIncome(float income) &#123;
+        this.income = income;
+    &#125;
+
+    public float getIncome() &#123;
+        return income;
+    &#125;
+
+    public void setVacationDays(int vacationDays) &#123;
+        this.vacationDays = vacationDays;
+    &#125;
+
+    public int getVacationDays() &#123;
+        return vacationDays;
+    &#125;
+
+    public void setDegree(int degree) &#123;
+        this.degree = degree;
+    &#125;
+
+    public int getDegree() &#123;
+        return degree;
+    &#125;
+    
+    // 继承Accept方法
+    @Override
+    public void Accept(Visitor visitor) &#123;
+        // TODO Auto-generated method stub
+        visitor.Visit(this);
+    &#125;
+
+&#125;
+</code></pre>
+<p>然后我们什么一个访问接口：Visitor.java</p>
+<pre><code>public interface Visitor &#123;
+    abstract public void Visit( Element element );
+    
+&#125;
+</code></pre>
+<p>补偿金算法实现类继承访问接口，实现功能： CompensationVisitor.java</p>
+<pre><code>public class CompensationVisitor implements Visitor &#123;
+
+    @Override
+    public void Visit(Element element) &#123;
+        // TODO Auto-generated method stub
+        Employee employee = ((Employee) element);
+
+        System.out.println(employee.getName() + &quot;&#39;s Compensation is &quot;
+                + (employee.getDegree() * employee.getVacationDays() * 10));
+    &#125;
+
+&#125;
+</code></pre>
+<p>测试类：</p>
+<pre><code>public class MainTest &#123;
+    public static void main(String[] args) &#123;
+        Employees mEmployees = new Employees();
+
+        mEmployees.Attach(new Employee(&quot;Tom&quot;, 4500, 8, 1));
+        mEmployees.Attach(new Employee(&quot;Jerry&quot;, 6500, 10, 2));
+        mEmployees.Attach(new Employee(&quot;Jack&quot;, 9600, 12, 3));
+
+        mEmployees.Accept(new CompensationVisitor());
+
+    &#125;
+
+&#125;
+</code></pre>
+<p>设计者模式采用了双重分配的原理，从设计上来说很精妙。每一个雇员对象都继承了Accept方法，可以让访问者直接访问自己，CompensationVisitor里面实现了具体操作，通过调用Accept方法传入CompensationVisitor对象就会执行CompensationVisitor类中的Visit方法，只有在运行时才会指定运行的方法，实现了动态分配，访问者模式使得程序的维护和功能新增变得简单，只需要新增观察者实现类，运行时指定实现类对象即可。</p>
+<p>访问者模式的优缺点：</p>
+<p>优点：</p>
+<ol>
+<li>符合单一职责原则</li>
+<li>扩展性良好</li>
+<li>有益于系统的管理和维护</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>增加新的元素类变得很困难 </li>
+<li>破坏封装性</li>
+</ol>
+<p>适用场景：</p>
+<p>适用于数据结构相对稳定，它把数据结构和作用于其上的操作解耦，使得操作集合可以相对自由地演化</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">向往</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://example.com/2021/03/08/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/">http://example.com/2021/03/08/%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a></div><div class="post_share"><div class="social-share" data-image="https://api.lyiqk.cn/scenery" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/03/08/%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F/"><img class="prev-cover" src="https://unsplash.it/1600/900?random" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">迭代器模式</div></div></a></div><div class="next-post pull-right"><a href="/2021/03/08/%E9%85%8D%E7%BD%AE%E7%B1%BB%E8%A7%A3%E6%9E%90%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90/"><img class="next-cover" src="https://api.ixiaowai.cn/gqapi/gqapi.php" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">SpringBoot配置类解析流程分析</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2021/03/08/设计模式之七大原则/" title="设计模式原则"><img class="cover" src="https://unsplash.it/1600/900?random" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-08</div><div class="title">设计模式原则</div></div></a></div><div><a href="/2021/03/08/迭代器模式/" title="迭代器模式"><img class="cover" src="https://unsplash.it/1600/900?random" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-08</div><div class="title">迭代器模式</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/touxiang.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">向往</div><div class="author-info__description">Just do it</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">61</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">21</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">15</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/2457081614"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/2457081614" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>Announcement</span></div><div class="announcement_content">向往的博客</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/03/09/JVM%E4%B9%8Bnew%E5%AF%B9%E8%B1%A1/" title="new对象的过程"><img src="https://unsplash.it/1600/900?random" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="new对象的过程"/></a><div class="content"><a class="title" href="/2021/03/09/JVM%E4%B9%8Bnew%E5%AF%B9%E8%B1%A1/" title="new对象的过程">new对象的过程</a><time datetime="2021-03-09T05:00:00.000Z" title="Created 2021-03-09 13:00:00">2021-03-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/03/08/20200225-Nginx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Nginx学习笔记"><img src="https://api.ixiaowai.cn/gqapi/gqapi.php" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Nginx学习笔记"/></a><div class="content"><a class="title" href="/2021/03/08/20200225-Nginx%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" title="Nginx学习笔记">Nginx学习笔记</a><time datetime="2021-03-08T12:46:25.000Z" title="Created 2021-03-08 20:46:25">2021-03-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/03/08/20210316-draw.io%E5%AD%A6%E4%B9%A0%E5%9F%B9%E8%AE%AD/" title="draw.io学习培训"><img src="https://api.lyiqk.cn/scenery" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="draw.io学习培训"/></a><div class="content"><a class="title" href="/2021/03/08/20210316-draw.io%E5%AD%A6%E4%B9%A0%E5%9F%B9%E8%AE%AD/" title="draw.io学习培训">draw.io学习培训</a><time datetime="2021-03-08T12:46:25.000Z" title="Created 2021-03-08 20:46:25">2021-03-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/03/08/20210308-JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-JVM%E8%BF%90%E8%A1%8C%E5%8F%82%E6%95%B0%E7%AF%87/" title="JVM学习笔记-JVM运行参数篇"><img src="https://api.lyiqk.cn/scenery" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JVM学习笔记-JVM运行参数篇"/></a><div class="content"><a class="title" href="/2021/03/08/20210308-JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-JVM%E8%BF%90%E8%A1%8C%E5%8F%82%E6%95%B0%E7%AF%87/" title="JVM学习笔记-JVM运行参数篇">JVM学习笔记-JVM运行参数篇</a><time datetime="2021-03-08T12:46:25.000Z" title="Created 2021-03-08 20:46:25">2021-03-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/03/08/ARM%20jdk1.8%E9%95%9C%E5%83%8F%E5%88%B6%E4%BD%9C/" title="ARM jdk1.8镜像制作"><img src="https://api.ixiaowai.cn/gqapi/gqapi.php" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="ARM jdk1.8镜像制作"/></a><div class="content"><a class="title" href="/2021/03/08/ARM%20jdk1.8%E9%95%9C%E5%83%8F%E5%88%B6%E4%BD%9C/" title="ARM jdk1.8镜像制作">ARM jdk1.8镜像制作</a><time datetime="2021-03-08T12:46:25.000Z" title="Created 2021-03-08 20:46:25">2021-03-08</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By 向往</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
